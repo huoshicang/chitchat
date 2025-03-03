@@ -2,10 +2,22 @@
   "name": "be",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "dev": "bun run index.ts",
+    "testDatabase": "bun run src/dataBase/index.ts",
+    "initDatabase": "bun run src/init/index.ts",
+    "freshStart": "bun run src/init/index.ts & bun run index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.13",
+    "openai": "^4.83.0",
+    "pino": "^9.6.0",
+    "tiktoken": "^1.0.20"
   }
 }
