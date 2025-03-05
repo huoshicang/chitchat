@@ -1,30 +1,16 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <n-layout class="h-screen" has-sider>
+    <layoutSider/>
+    <n-layout>
+      <layoutHeader/>
+      <layoutCenter/>
+      <layoutFooter/>
+    </n-layout>
+  </n-layout>
 </template>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<script setup lang="ts">
+import layoutSider from "./layout/layoutSider.vue";
+import layoutHeader from "./layout/layoutHeader.vue";
+import layoutCenter from "./layout/layoutCenter.vue";
+import layoutFooter from "./layout/layoutFooter.vue";
+</script>
