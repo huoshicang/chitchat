@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 
-import {ChatbubblesOutline, TrashOutline} from "@vicons/ionicons5";
+import {TrashOutline} from "@vicons/ionicons5";
 import {NButton, NIcon} from "naive-ui";
 </script>
 
