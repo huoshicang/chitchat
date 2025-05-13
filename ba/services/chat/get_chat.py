@@ -8,17 +8,16 @@ logger = get_logger(__name__)
 
 async def get_chat(authorization: str) -> ChatResponse:
     """
-
-    :rtype: object
+    获取对话列表
+    :param authorization: 浏览器指纹
+    :return: ChatResponse
     """
     try:
         db = MongoDB()
         chat, error_message = db.find("chat",
                        {"user_id": authorization, "is_del": False},
                        {
-                           "message_id": True,
-                           "title": True,
-                           "_id": True,
+                           "is_del": False,
                        })()
 
 

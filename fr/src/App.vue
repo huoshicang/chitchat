@@ -1,25 +1,36 @@
 <template>
-  <n-layout class="h-screen" has-sider>
-    <layoutSider/>
-    <n-layout>
-      <layoutHeader/>
-      <layoutCenter/>
-      <layoutFooter/>
-    </n-layout>
-  </n-layout>
+  <n-config-provider>
+    <n-message-provider>
+      <n-layout class="h-screen" has-sider>
+        <layoutSider/>
+        <n-layout>
+          <router-view :key="$route.fullPath" />
+        </n-layout>
+      </n-layout>
+      <Config />
+    </n-message-provider>
+  </n-config-provider>
 </template>
+
+
 <script setup lang="ts">
 import layoutSider from "./view/layout/layoutSider.vue";
-import layoutHeader from "./view/layout/layoutHeader.vue";
-import layoutCenter from "./view/layout/layoutCenter.vue";
-import layoutFooter from "./view/layout/layoutFooter.vue";
-import {onMounted} from "vue";
-import instance from "./api/fach.ts";
+import Config from "./components/config.vue";
+import {onMounted, toRefs} from "vue";
+import {getFingerprint} from "./tsFunc/fingerprint.ts";
+import {settings} from "./stores/setting.ts";
+
+const Settings = settings()
 
 onMounted(async () => {
-  const {status_code, data, message} = await instance.get('/auth')
-  console.log(status_code, data, message)
+  
+  if (!localStorage.getItem("user_id")) {
+    const cachedFingerprint = await getFingerprint()
+    localStorage.setItem("user_id", cachedFingerprint)
+  }
+  
+  if (!Settings.user_info) await Settings.getData()
+  
+  
 });
-
-
 </script>

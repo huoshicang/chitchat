@@ -11,8 +11,6 @@ setup_logger()
 logger = get_logger(__name__)
 
 
-
-
 def judgment_auth(request) -> JSONResponse:
     auth = False
     auth_header = request.headers.get("authorization")
@@ -25,13 +23,42 @@ def judgment_auth(request) -> JSONResponse:
 
             db = MongoDB()
             # 查询用户信息
-            user, error_message = db.find_one('users', {'user_id': user_id}, {"_id": True, 'user_id': True, "setting": True})()
+            user, error_message = db.find_one('users', {'user_id': user_id},
+                                              {})()
+
+            print(user)
 
             # 用户不存在，创建新用户
             if user:
                 logger.debug(f"用户已存在，用户信息：{user}")  # 查询成功日志
             else:
-                user = db.insert_one('users', {'user_id': user_id, "setting": user_id}).get_result()
+
+                # 菜单
+                siderContent = {
+                    "display": True,
+                    "id": True,
+                    "share": True,
+                    "archive": True
+                }
+
+                # 消息
+                messageConfig = {
+                    "showAll": True,
+                    "showModel": True,
+                    "showPromptTokens": True,
+                    "showCompletionTokens": True,
+                    "showTotalTokens": True,
+                    "showReasoningTokens": True,
+                    "showTime": True,
+                    "think": True,
+                }
+
+                user = db.insert_one('users', {
+                    'user_id': user_id,
+                    "setting": user_id,
+                    "siderContent": siderContent,
+                    "messageConfig": messageConfig,
+                })()
                 logger.info(f"创建新用户：{user_id}，状态为：{user}")
 
             auth = True

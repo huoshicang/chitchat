@@ -1,5 +1,5 @@
 <template>
-  <n-layout-footer position="absolute" class="h-34.5" bordered style="padding: 10px">
+  <n-layout-footer position="absolute" class="h-24" bordered style="padding: 10px">
     <layoutSiderFooterCom />
   </n-layout-footer>
 </template>

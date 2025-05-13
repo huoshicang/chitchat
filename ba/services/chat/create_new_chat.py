@@ -10,16 +10,30 @@ from database import MongoDB
 logger = get_logger(__name__)
 
 
-async def create_new_chat(authorization: str, message_id: str, ai_config: dict, model_config: dict, prompt: List[dict], title: str = "unnamed"):
+async def create_new_chat(
+        authorization: str,
+        message_id: str,
+        ai_var: dict,
+        model_var: dict, prompt: List[dict], title: str = "unnamed"):
+    """
+    创建新的聊天记录
+    :param authorization: 认证id
+    :param message_id: 消息id
+    :param ai_var: ai设置
+    :param model_var: 模型设置
+    :param prompt: 提示（第一句话 ）
+    :param title: 标题
+    :return:
+    """
     if not message_id:
         logger.warning("无消息id，不创建")
 
     try:
 
         try:
-
-            client = OpenAI(**ai_config).chat.completions.create(
-                model=model_config.get("model"),
+            # 获取标题
+            client = OpenAI(**ai_var).chat.completions.create(
+                model=model_var.get("model"),
                 stream=False,
                 temperature=0.4,
                 top_p=1,
@@ -49,7 +63,13 @@ The name is:
 
         db = MongoDB()
         chat, error_message = db.insert_one("chat",
-                       {"user_id": authorization, "message_id": message_id, "title": title, "share": False})()
+                       {
+                           "user_id": authorization,
+                           "message_id": message_id,
+                           "title": title,
+                           "share": False,
+                           "archive": False
+                       })()
 
 
         if error_message != "":

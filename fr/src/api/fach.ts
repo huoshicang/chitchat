@@ -1,8 +1,5 @@
 import axios from "axios";
-import {getFingerprint} from "../tsFunc/fingerprint.ts";
-import { useMessage } from 'naive-ui'
 
-let cachedFingerprint: string | null = null
 
 const instance = axios.create({
   baseURL: '/api',
@@ -12,10 +9,7 @@ const instance = axios.create({
 
 // 添加请求拦截器（关键修改）
 instance.interceptors.request.use(async (config) => {
-  if (!cachedFingerprint) {
-    cachedFingerprint = await getFingerprint()
-  }
-  config.headers.Authorization = `Bearer ${cachedFingerprint}`
+  config.headers.Authorization = `Bearer ${localStorage.getItem("user_id")}`
   return config;
 }, (error) => {
   return Promise.reject(error);
@@ -44,8 +38,7 @@ instance.interceptors.response.use(
 
     // 显示错误提示（可根据需要配置静默模式）
     if (!error.config?.silent) {
-      const message = useMessage()
-      message.warning(errorMessage)
+      window.$message.warning(errorMessage)
     }
 
     // 统一错误格式

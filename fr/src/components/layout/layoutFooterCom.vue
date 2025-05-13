@@ -10,13 +10,17 @@
           </template>
         </n-button>
       </n-input-group>
-      <n-button ghost>
-        <template #icon>
-          <n-icon>
-            <SendOutline/>
-          </n-icon>
-        </template>
-      </n-button>
+      <div class="w-69 flex justify-between">
+        <ModelSelect/>
+        <n-button ghost>
+          <template #icon>
+            <n-icon>
+              <SendOutline/>
+            </n-icon>
+          </template>
+        </n-button>
+      </div>
+      
     </div>
     <n-input
       v-model:value="value"
@@ -29,9 +33,12 @@
 </template>
 
 <script setup lang="ts">
-
+import ModelSelect from "../../components/drawer/model/select.vue"
 import {SendOutline, TrashOutline} from "@vicons/ionicons5";
 import {NButton, NIcon} from "naive-ui";
+import {model} from "../../stores/model.ts";
+
+const modelValue = model().modelValue
 </script>
 
 <style scoped>

@@ -9,18 +9,24 @@ logger = get_logger(__name__)
 
 
 async def get_messages(authorization: str, message_id: str) -> MessageResponse:
+    """
+    获取对话内容
+    :param authorization: 认证id
+    :param message_id: 对话内容id
+    :return:
+    """
     try:
         db = MongoDB()
-        message, error_message = db.find("message",
-                                         {"user_id": authorization, "is_del": 'false', "_id": ObjectId(message_id)},
-                                         {"_id": False, })()
+        message, error_message = db.find_one("message",
+                                         {"user_id": authorization, "is_del": False, "_id": ObjectId(message_id)},
+                                         {"_id": False, "is_del": False})()
 
-        if error_message != "":
+        if error_message:
             logger.error(f"获取用户 {authorization} 的聊天记录时发生错误: {error_message}")
             return MessageResponse(data=message, status_code=status.HTTP_400_BAD_REQUEST, message=error_message)
 
         logger.info(f"获取用户 {authorization} 的记录成功")
-        return MessageResponse(data=message, status_code=status.HTTP_200_OK, message="成功")
+        return MessageResponse(data=message if message else {}, status_code=status.HTTP_200_OK, message="成功")
 
     except PyMongoError as e:
         logger.error(f"数据库错误: {str(e)}")

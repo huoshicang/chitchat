@@ -6,9 +6,9 @@ from fastapi import WebSocket
 from utils import ws_send_response
 
 
-async def initiate_ai(ai_config: dict, model_config: dict, websocket: WebSocket ) -> List[dict]:
+async def initiate_ai(ai_var: dict, model_var: dict, websocket: WebSocket ) -> List[dict]:
 
-    completion = OpenAI(**ai_config).chat.completions.create(**model_config)
+    completion = OpenAI(**ai_var).chat.completions.create(**model_var)
 
     data = {
         "reasoning_content": "",
@@ -17,6 +17,9 @@ async def initiate_ai(ai_config: dict, model_config: dict, websocket: WebSocket 
 
     for chunk in completion:
         chunk_data = json.loads(chunk.model_dump_json())
+
+        print(chunk_data)
+
         choice = chunk_data.get('choices', [{}])[0]
         finish_reason = choice.get('finish_reason')
 
@@ -30,9 +33,11 @@ async def initiate_ai(ai_config: dict, model_config: dict, websocket: WebSocket 
             data['content'] += content
 
         if finish_reason == 'stop':
+            chunk_data['choices'][0]['delta']['content'] = data['content']
+
             if data['reasoning_content']:
                 chunk_data['choices'][0]['delta']['reasoning_content'] = data['reasoning_content']
-            chunk_data['choices'][0]['delta']['content'] = data['content']
+
             return chunk_data
         else:
             await ws_send_response(websocket, chunk_data)

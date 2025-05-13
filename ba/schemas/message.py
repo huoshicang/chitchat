@@ -29,11 +29,11 @@ class AiConfig(BaseModel):
 class NewMessage(BaseModel):
     message_id: str
     send_text: List[SendText]
-    ai_config: AiConfig
+    ai_var: AiConfig
 
 
 # 聊天的响应
 class MessageResponse(BaseModel):
     status_code: int = status.HTTP_200_OK
-    data: list[dict] | None = List[SendText]
+    data: list[dict] | None | dict = List[SendText]
     message: str = "成功"

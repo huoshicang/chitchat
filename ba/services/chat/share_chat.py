@@ -3,12 +3,18 @@ from starlette import status
 from bson import ObjectId
 from config import get_logger
 from database import MongoDB
-from schemas import ShareChat
+from schemas import ChatResponse
 
 logger = get_logger(__name__)
 
 
-async def share_chat(authorization: str, chat_id: str) -> ShareChat:
+async def share_chat(authorization: str, chat_id: str) -> ChatResponse:
+    """
+    分享聊天记录
+    :param authorization: 认证id
+    :param chat_id: 聊天记录id
+    :return:
+    """
     try:
         db = MongoDB()
 
@@ -22,15 +28,15 @@ async def share_chat(authorization: str, chat_id: str) -> ShareChat:
 
         if error_message != "":
             logger.error(f"分享 {authorization} 的记录时发生错误: {error_message}")
-            return ShareChat(data=chat, status_code=status.HTTP_400_BAD_REQUEST, message=error_message)
+            return ChatResponse(data=chat, status_code=status.HTTP_400_BAD_REQUEST, message=error_message)
 
         logger.info(f"{chat_id} 的聊天分享成功")
-        return ShareChat(data=chat, status_code=status.HTTP_200_OK, message="成功")
+        return ChatResponse(data=chat, status_code=status.HTTP_200_OK, message="成功")
 
     except PyMongoError as e:
         logger.error(f"数据库错误: {str(e)}")
-        return ShareChat(data={}, status_code=status.HTTP_503_SERVICE_UNAVAILABLE, message="数据库服务不可用")
+        return ChatResponse(data={}, status_code=status.HTTP_503_SERVICE_UNAVAILABLE, message="数据库服务不可用")
 
     except Exception as e:
         logger.error(f"分享记录时发生未知错误: {str(e)}")
-        return ShareChat(data={}, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, message="服务器内部错误")
+        return ChatResponse(data={}, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, message="服务器内部错误")

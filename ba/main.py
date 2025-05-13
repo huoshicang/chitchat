@@ -29,6 +29,9 @@ api = APIRouter(prefix="/api", tags=["api"])
 api.include_router(api_router)
 app.include_router(api)
 
+@app.get("/api/auth")
+def root(request: Request) -> JSONResponse:
+    return judgment_auth(request)
 
 
 @app.websocket("/ws")
@@ -44,9 +47,6 @@ async def websocket_endpoint(websocket: WebSocket):
         await websocket.close()
 
 
-@app.get("/auth")
-def root(request: Request) -> JSONResponse:
-    return judgment_auth(request)
 
 
 # 跨域

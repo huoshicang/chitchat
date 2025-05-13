@@ -105,8 +105,8 @@ class MongoDB:
             collection = self._db[collection_name]
             document = {
                 **data,
-                'creation_time': datetime.now(),
-                'modification_time': datetime.now(),
+                'creation_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'modification_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 'is_del': False
             }
             result = collection.insert_one(document)

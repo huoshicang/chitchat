@@ -1,10 +1,6 @@
 from fastapi import Request, APIRouter
-import httpx
-
 from schemas import ChatResponse
-from services import get_chat
-from services.message.get_message import get_messages
-from utils.auth import logger
+from services import get_messages
 
 router = APIRouter()
 

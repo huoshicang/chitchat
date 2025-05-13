@@ -6,6 +6,9 @@
 
 <script setup lang="ts">
 import LayoutHeaderCom from "../../components/layout/layoutHeaderCom.vue";
+
+
+
 </script>
 
 <style scoped>
