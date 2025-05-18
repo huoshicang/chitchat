@@ -24,7 +24,9 @@ const router = useRouter();
 
 const New = () => {
   router.push(`/`)
-  config.setTitle(null)
+  config.set_title(null)
+  config.set_new_chat(null)
+  config.set_prompt(null)
 }
 
 </script>

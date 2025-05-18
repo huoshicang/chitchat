@@ -1,14 +1,15 @@
-from typing import List, Union
+from typing import List
 
 from pydantic import BaseModel
 from starlette import status
 
 # 主请求体模型
 class PromptsResponseData(BaseModel):
-    id: str
+    id: str = ""
     title: str
-    content: str
+    prompt: str
     share: bool = False
+
 
 # 聊天的响应
 class PromptsResponse(BaseModel):

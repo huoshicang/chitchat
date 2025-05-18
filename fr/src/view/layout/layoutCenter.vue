@@ -12,34 +12,49 @@
         <img class="w-7 h-7 rounded-full" :class="item.role === 'user' ? 'ml-2' : 'mr-2'"
              src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" alt="">
         <div class="flex flex-col" :class="item.role === 'user' ? 'items-end' : 'items-start'">
-          
-          <n-collapse arrow-placement="right"
-                      class="ml-3"
-                      v-if="item.role != 'user' &&
-                      item.choices[0].delta.reasoning_content &&
-                      config.think"
-                      :default-expanded-names="[expandedName]">
-            <n-collapse-item title="思考" :name="item.created" v-if="config.showAll">
-              <Text :text="item.choices[0].delta.reasoning_content "/>
+          <n-collapse arrow-placement="right" class="ml-3" v-show="reasoning_content_show(item)">
+            <n-collapse-item title="思考">
+              <Text :text="reasoning_content(item)"/>
             </n-collapse-item>
           </n-collapse>
+          <!--内容-->
+          <n-ellipsis v-if="item.role === 'system'" expand-trigger="click" line-clamp="2" :tooltip="false">
+            {{ item.content }}
+          </n-ellipsis>
           
-          <Text :text="item.role === 'user' ? item.content : item.choices[0].delta.content"/>
-          <div v-if="item.role !== 'user' && config.showAll">
+          <n-space v-else>
+            <Text  :error="item.status_code" :asRawText="item.status_code" :text="content(item)"/>
+            <Loding v-show="index === props.messages.length - 1 && sendLoding && item.id" />
+          </n-space>
+          
+          
+          <!--额外信息-->
+          <div v-show="item.role !== 'user' && item.role !== 'system' && config.showAll">
             <n-text depth="3" class="ml-3"> {{ generateDisplay(item) }}
-              <span  v-if="config.showTime && item.created">
+              <span v-show="config.showTime && item.created">
                  | <n-time :time="item.created" unix/>
               </span>
             </n-text>
           </div>
+          <!--操作按钮-->
           <n-input-group class="input-group">
+            <!--编辑-->
             <n-button ghost size="small">
               <template #icon>
                 <n-icon>
-                  <ChatbubblesOutline/>
+                  <Pencil/>
                 </n-icon>
               </template>
             </n-button>
+            <!--复制-->
+            <n-button ghost size="small">
+              <template #icon>
+                <n-icon>
+                  <ClipboardOutline/>
+                </n-icon>
+              </template>
+            </n-button>
+          <!--删除-->
             <n-button ghost size="small">
               <template #icon>
                 <n-icon>
@@ -49,6 +64,7 @@
             </n-button>
           </n-input-group>
         </div>
+        
       </div>
     </n-infinite-scroll>
   </n-layout-content>
@@ -56,9 +72,9 @@
 
 <script setup lang="ts">
 import Text from "../../components/text/index.vue"
+import Loding from "./components/layoutSider/loding.vue"
 import {NButton, NIcon} from "naive-ui";
-import {ChatbubblesOutline, TrashOutline} from "@vicons/ionicons5";
-import {onMounted, ref, watch} from "vue";
+import {ClipboardOutline, Pencil, TrashOutline} from "@vicons/ionicons5";
 import 'katex/dist/katex.min.css'
 import '../../styles/lib/tailwind.css'
 import '../../styles/lib/highlight.less'
@@ -73,10 +89,11 @@ const props = defineProps({
     type: Array,
     default: []
   },
+  sendLoding: {
+    type: Boolean,
+    required: false,
+  },
 })
-
-// 展开
-const expandedName = ref<string>("")
 
 // 生成消息显示内容
 const generateDisplay = (item: any) => {
@@ -109,9 +126,32 @@ const generateDisplay = (item: any) => {
   return output ? output.slice(0, -3) : ''; // 移除最后一个多余的 " | "，如果output为空则返回空字符串
 }
 
-onMounted(() => {
+/*
+* 内容
+* */
+const content = (value) => {
+  if (value.role === 'user') {
+    return value.content;
+  } else if (value.status_code) {
+    // todo 美化json
+    return value.message;
+  } else if (value.choices?.[0]?.delta?.content) {
+    return value.choices[0].delta.content;
+  }
+  
+  return ''; // 默认返回空字符串，避免 undefined 的情况
+}
 
-})
+// 是否展示思考
+const reasoning_content_show = (value) => {
+  
+  if (value.role == 'user') return false
+  else return (!!value.choices?.[0]?.delta?.reasoning_content && config.think && config.showAll);
+}
+
+const reasoning_content = (value) => {
+  return value.choices?.[0]?.delta?.reasoning_content ?? ""
+}
 
 </script>
 

@@ -12,7 +12,7 @@
   >
     <n-drawer-content>
       <n-alert title="注意保存" type="warning"></n-alert>
-      <n-tabs type="line">
+      <n-tabs type="line" default-tab="预设">
         <n-tab-pane name="模型" display-directive="show">
           <Model />
         </n-tab-pane>
@@ -20,7 +20,7 @@
           <Show />
         </n-tab-pane>
         <n-tab-pane name="预设" display-directive="show">
-          在两点半消失
+          <Prompts />
         </n-tab-pane>
       </n-tabs>
       
@@ -30,11 +30,30 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import Model from "../../../components/drawer/model/index.vue"
 import Show from "../../../components/drawer/show/index.vue"
+import Prompts from "../../../components/drawer/prompts/index.vue"
+import {info} from "../../../stores/info.ts";
+import {useRoute} from "vue-router";
 
-const active = ref<boolean>(true)
+const config = info();
+const route = useRoute();
+
+const active = ref<boolean>(false)
+
+// 监听路由变化
+watch(
+  [() => route.params.id, () => config.prompt],
+  ([newId, newPrompt], [oldId, oldPrompt]) => {
+    // 关闭弹窗
+    if (!newId && newPrompt && newPrompt != oldPrompt) active.value = false
+    
+    
+  },
+  {immediate: true}
+);
+
 
 </script>
 

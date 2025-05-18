@@ -82,8 +82,6 @@ const submit = (e: MouseEvent) => {
       window.$message.error('验证失败')
     }
   })
-  
-  
 }
 
 </script>

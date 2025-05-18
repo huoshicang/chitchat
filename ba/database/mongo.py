@@ -133,8 +133,8 @@ class MongoDB:
             documents = [
                 {
                     **doc,
-                    'creation_time': datetime.now(),
-                    'modification_time': datetime.now(),
+                    'creation_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    'modification_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                     'is_del': False
                 } for doc in data
             ]
@@ -211,7 +211,7 @@ class MongoDB:
                 **update,
                 '$set': {
                     **update.get('$set', {}),
-                    'modification_time': datetime.now()
+                    'modification_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 }
             }
             result = collection.update_one(filter, update_with_timestamp)
@@ -240,7 +240,7 @@ class MongoDB:
                 **update,
                 '$set': {
                     **update.get('$set', {}),
-                    'modification_time': datetime.now()
+                    'modification_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 }
             }
             result = collection.update_many(filter, update_with_timestamp)

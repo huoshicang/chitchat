@@ -1,26 +1,27 @@
 import { defineStore } from 'pinia'
 import {reactive} from "vue";
 
+export interface ModelValue {
+  id: string | null
+  name: string,
+  model_var: {
+    model: string,
+    temperature: number | null,
+    top_p: number | null
+  },
+  ai_var: {
+    api_key: string,
+    base_url: string
+  },
+  extra: Array
+}
 
 export const model = defineStore(
   'model',
   () => {
 
     // 模型值
-    const modelValue = reactive<{
-      id: string | null
-      name: string,
-      model_var: {
-        model: string,
-        temperature: number | null,
-        top_p: number | null
-      },
-      ai_var: {
-        api_key: string,
-        base_url: string
-      },
-      extra: Array
-    }>({
+    const modelValue = reactive<ModelValue>({
       name: "",
       model_var: {
         model: "",
@@ -65,8 +66,8 @@ export const model = defineStore(
   {
     persist: {
       enabled: true,
-      key: 'settings',
-      storage: sessionStorage,
+      key: 'model',
+      storage: localStorage,
     },
   }
 )

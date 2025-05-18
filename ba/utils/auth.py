@@ -26,7 +26,6 @@ def judgment_auth(request) -> JSONResponse:
             user, error_message = db.find_one('users', {'user_id': user_id},
                                               {})()
 
-            print(user)
 
             # 用户不存在，创建新用户
             if user:
@@ -53,11 +52,16 @@ def judgment_auth(request) -> JSONResponse:
                     "think": True,
                 }
 
+                promptsConfig = {
+                    "share": True
+                }
+
                 user = db.insert_one('users', {
                     'user_id': user_id,
                     "setting": user_id,
                     "siderContent": siderContent,
                     "messageConfig": messageConfig,
+                    "promptsConfig": promptsConfig,
                 })()
                 logger.info(f"创建新用户：{user_id}，状态为：{user}")
 

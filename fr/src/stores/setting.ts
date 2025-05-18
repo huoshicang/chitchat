@@ -13,6 +13,8 @@ export const settings = defineStore(
 
     const messageConfig: { [key: string]: boolean } = ref()
 
+    const promptsConfig: { [key: string]: boolean } = ref()
+
     const getData = async () => {
       const {status_code, data, message} = await instance.get('/auth')
 
@@ -22,14 +24,18 @@ export const settings = defineStore(
         _id: data._id,
       }
 
+
+
       siderContent.value = data.siderContent
       messageConfig.value = data.messageConfig
+      promptsConfig.value = data.promptsConfig
     }
 
     return {
       user_info,
       siderContent,
       messageConfig,
+      promptsConfig,
       getData,
     }
   },

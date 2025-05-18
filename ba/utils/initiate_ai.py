@@ -18,8 +18,6 @@ async def initiate_ai(ai_var: dict, model_var: dict, websocket: WebSocket ) -> L
     for chunk in completion:
         chunk_data = json.loads(chunk.model_dump_json())
 
-        print(chunk_data)
-
         choice = chunk_data.get('choices', [{}])[0]
         finish_reason = choice.get('finish_reason')
 
@@ -32,15 +30,17 @@ async def initiate_ai(ai_var: dict, model_var: dict, websocket: WebSocket ) -> L
         elif content is not None:
             data['content'] += content
 
+        await ws_send_response(websocket, chunk_data)
+
         if finish_reason == 'stop':
+
             chunk_data['choices'][0]['delta']['content'] = data['content']
 
             if data['reasoning_content']:
                 chunk_data['choices'][0]['delta']['reasoning_content'] = data['reasoning_content']
 
             return chunk_data
-        else:
-            await ws_send_response(websocket, chunk_data)
+
 
 
 

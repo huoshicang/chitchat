@@ -7,13 +7,12 @@ from database import MongoDB
 logger = get_logger(__name__)
 
 
-async def new_prompts(authorization: str,  title: str, content: str, share: bool) -> PromptsResponse:
+async def new_prompts(authorization: str,  title: str, prompt: str) -> PromptsResponse:
     """
     新增预设
     :param authorization: 认证id
     :param title: 标题
-    :param content: 内容
-    :param share: 分享
+    :param prompt: 内容
     :return:
     """
     try:
@@ -22,8 +21,8 @@ async def new_prompts(authorization: str,  title: str, content: str, share: bool
         prompts, error_message = db.insert_one("prompts",
                                              {
                                                  "title": title,
-                                                 "content": content,
-                                                 "share": share,
+                                                 "prompt": prompt,
+                                                 "share": False,
                                                  "user_id": authorization,
                                              })()
 

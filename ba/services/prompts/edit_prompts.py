@@ -8,13 +8,13 @@ from database import MongoDB
 logger = get_logger(__name__)
 
 
-async def edit_prompts(authorization: str, title: str, content: str, prompts_id:str) -> PromptsResponse:
+async def edit_prompts(authorization: str, title: str, prompt: str, prompts_id:str) -> PromptsResponse:
     """
     修改模型
     :param authorization: 认证id
     :param prompts_id: 预设id
     :param title: 标题
-    :param content: 内容
+    :param prompt: 内容
     :return:
     """
     try:
@@ -24,7 +24,7 @@ async def edit_prompts(authorization: str, title: str, content: str, prompts_id:
                                              {
                                                  "$set": {
                                                      "title": title,
-                                                     "content": content,
+                                                     "prompt": prompt,
                                                  }
                                              })()
 

@@ -24,7 +24,7 @@ async def delChat(request: Request, chat_id: str):
     chats = await del_chat(authorization=authorization, chat_id=chat_id)
     return chats
 
-@router.get("/share", response_model=ChatResponse, description="删除聊天")
+@router.get("/share", response_model=ChatResponse, description="分享聊天")
 async def shareChat(request: Request, chat_id: str):
     authorization = request.headers.get("authorization").replace("Bearer ", "")
     chats = await share_chat(authorization=authorization, chat_id=chat_id)

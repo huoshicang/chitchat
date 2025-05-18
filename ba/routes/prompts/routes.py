@@ -4,39 +4,37 @@ from services import new_prompts, del_prompts, edit_prompts, get_prompts, share_
 
 router = APIRouter()
 
+@router.get("/porompts", response_model=PromptsResponse, description="获取提示")
+async def Prompts(request: Request):
+    authorization = request.headers.get("authorization").replace("Bearer ", "")
+    porompts = await get_prompts(authorization=authorization)
+    return porompts
 
-@router.post("/new", response_model=PromptsResponse,  description="增加模型")
-async def newModel(request: Request, body: PromptsResponseData):
+@router.post("/new", response_model=PromptsResponse,  description="增加提示")
+async def newPrompts(request: Request, body: PromptsResponseData):
     authorization = request.headers.get("authorization").replace("Bearer ", "")
     title = body.title
-    content = body.content
-    share = body.share
-    model = await new_prompts(authorization=authorization, title=title, content=content, share=share)
-    return model
+    prompt = body.prompt
+    porompts = await new_prompts(authorization=authorization, title=title, prompt=prompt)
+    return porompts
 
-@router.get("/del", response_model=PromptsResponse, description="删除模型")
-async def delChat(request: Request, prompts_id: str):
+@router.get("/del", response_model=PromptsResponse, description="删除提示")
+async def delPrompts(request: Request, prompts_id: str):
     authorization = request.headers.get("authorization").replace("Bearer ", "")
-    chats = await del_prompts(authorization=authorization, prompts_id=prompts_id)
-    return chats
+    porompts = await del_prompts(authorization=authorization, prompts_id=prompts_id)
+    return porompts
 
-@router.post("/edit", response_model=PromptsResponse, description="修改聊天")
-async def editModel(request: Request, body: PromptsResponseData):
+@router.post("/edit", response_model=PromptsResponse, description="修改提示")
+async def editPrompts(request: Request, body: PromptsResponseData):
     authorization = request.headers.get("authorization").replace("Bearer ", "")
     prompts_id = body.id
     title = body.title
-    content = body.content
-    chats = await edit_prompts(authorization=authorization, title=title, content=content, prompts_id=prompts_id)
-    return chats
+    prompt = body.prompt
+    porompts = await edit_prompts(authorization=authorization, title=title, prompt=prompt, prompts_id=prompts_id)
+    return porompts
 
-@router.get("/model", response_model=PromptsResponse, description="修改模型")
-async def Model(request: Request):
-    authorization = request.headers.get("authorization").replace("Bearer ", "")
-    chats = await get_prompts(authorization=authorization)
-    return chats
-
-@router.get("/share", response_model=PromptsResponse, description="分享预设")
+@router.get("/share", response_model=PromptsResponse, description="分享提示")
 async def sharePrompts(request: Request, prompts_id: str):
     authorization = request.headers.get("authorization").replace("Bearer ", "")
-    chats = await share_prompts(authorization=authorization, prompts_id=prompts_id)
-    return chats
+    porompts = await share_prompts(authorization=authorization, prompts_id=prompts_id)
+    return porompts

@@ -1,3 +1,4 @@
+import json
 from typing import List
 
 from fastapi import WebSocket
@@ -12,6 +13,7 @@ from utils import ws_send_response, transition_message
 from utils.initiate_ai import initiate_ai
 
 logger = get_logger(__name__)
+
 
 
 async def get_message(message_id: str, authorization: str, websocket: WebSocket, db: MongoDB, prompt: List[dict]) -> List[dict]:
@@ -40,8 +42,13 @@ async def send_message(websocket: WebSocket, message_data: NewMessage, headers) 
     """
     处理 WebSocket 消息，发送消息并返回 AI 响应。
     """
+
     # 浏览器指纹
     authorization = headers.get("authorization", "").replace("Bearer ", "")
+
+    if authorization == "":
+        authorization = message_data.get("authorization", "")
+
     message_id = message_data.get("message_id", "")
     message_index = message_data.get("message_index", 0)
     prompt = message_data.get("prompt", [])
@@ -54,7 +61,15 @@ async def send_message(websocket: WebSocket, message_data: NewMessage, headers) 
         # 额外参数 合并到模型参数
         if extra:
             for i in extra:
-                model_var[i['key']] = i['value']
+                key = i['key']
+                value = i['value']
+
+                # 尝试解析为 JSON，失败后保留原始值
+                try:
+                    parsed_value = json.loads(value)
+                    model_var[key] = parsed_value
+                except json.JSONDecodeError:
+                    model_var[key] = value
 
         db = MongoDB()
         if message_id != "" and message_index == 0:

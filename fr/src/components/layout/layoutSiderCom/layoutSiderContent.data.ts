@@ -1,14 +1,16 @@
 import type {Component} from "vue";
 import {h} from "vue";
-import {NDropdown, NEllipsis, NIcon, NText} from "naive-ui";
+import {NDropdown, NIcon, NText} from "naive-ui";
 import {type MenuOption, type DropdownOption} from "naive-ui";
 import type {OPTIONSItem, MenuOptionItem} from "./layoutSiderContent";
-import {settings} from "../../../../stores/setting.ts";
-import instance from "../../../../api/fach.ts";
+import {settings} from "../../../stores/setting.ts";
+import instance from "../../../api/fach.ts";
+
+import {ChatbubblesOutline} from "@vicons/ionicons5";
 
 
 // 菜单操作
-const options = (item: MenuActionItem): OPTIONSItem[] => {
+const options = (item) => {
   const config = settings().siderContent;
 
 
@@ -110,22 +112,22 @@ export const renderIcon = (icon: Component): vNode => {
 export const setMenuOptions = (menuOptions: MenuOptionItem[] = []): MenuOption => {
 
   return menuOptions.map((item, _): MenuOption => {
+
     return {
-      label: () => {
-        return h(NEllipsis, {}, h(NDropdown, {
+      title: () => {
+        return h(NDropdown, {
             placement: 'bottom-start',
             trigger: 'hover',
             size: 'small',
             options: options(item),
             onSelect: handleSelect
           },
-          {
-            default: item.title
-          }))
+          { default: () => item.title })
       },
       key: item.message_id,
-      title: item.title
-      //icon: renderIcon(ChatboxEllipsesOutline)
+      label: item.title
     }
   })
 }
+
+

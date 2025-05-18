@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import layoutSider from "./view/layout/layoutSider.vue";
 import Config from "./components/config.vue";
-import {onMounted, toRefs} from "vue";
+import {onMounted} from "vue";
 import {getFingerprint} from "./tsFunc/fingerprint.ts";
 import {settings} from "./stores/setting.ts";
 
@@ -29,7 +29,7 @@ onMounted(async () => {
     localStorage.setItem("user_id", cachedFingerprint)
   }
   
-  if (!Settings.user_info) await Settings.getData()
+  await Settings.getData()
   
   
 });

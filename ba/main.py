@@ -38,6 +38,7 @@ def root(request: Request) -> JSONResponse:
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     try:
+
         data = json.loads(await websocket.receive_text())
         headers = websocket.headers
         await send_message(websocket, data, headers)

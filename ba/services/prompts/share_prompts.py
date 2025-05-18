@@ -16,6 +16,7 @@ async def share_prompts(authorization: str,prompts_id: str) -> PromptsResponse:
     :return:
     """
     try:
+
         db = MongoDB()
 
         find_prompts, _ = db.find_one("prompts", {"user_id": authorization, "_id": ObjectId(prompts_id)},

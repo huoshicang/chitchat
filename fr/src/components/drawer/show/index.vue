@@ -76,6 +76,17 @@
       </n-thing>
     </n-list-item>
     <n-list-item>
+      <n-thing title="预设">
+        <template #description>
+          <n-space size="large">
+            <div>分享：
+              <n-switch v-model:value="promptsConfig.share"/>
+            </div>
+          </n-space>
+        </template>
+      </n-thing>
+    </n-list-item>
+    <n-list-item>
       <n-space justify="end">
         <n-button type="primary" @click="submit">
           确定
@@ -93,6 +104,7 @@ import instance from "../../../api/fach.ts";
 
 const siderContent = settings().siderContent
 const messageConfig = settings().messageConfig
+const promptsConfig = settings().promptsConfig
 const user_info = settings().user_info
 const msg = useMessage()
 
@@ -110,7 +122,8 @@ const submit = async () => {
     setting: user_info.setting,
     id: user_info._id,
     siderContent,
-    messageConfig
+    messageConfig,
+    promptsConfig
   })
   
   if (status_code === 200) msg.success('修改成功')
