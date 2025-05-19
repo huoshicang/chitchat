@@ -1,4 +1,5 @@
 import json
+import os
 
 from pymongo import MongoClient
 from typing import Optional, Dict, List, Any
@@ -7,8 +8,13 @@ from datetime import datetime
 from config.logging_config import get_logger
 
 class MongoDB:
+    username = os.getenv("MONGODB_USERNAME")
+    password = os.getenv("MONGODB_PASSWORD")
+    host = os.getenv("MONGODB_HOST")
+    port = os.getenv("MONGODB_PORT")
+
     _instance = None  # 用于单例模式，存储唯一的实例
-    _URL = 'mongodb://mongodb:Miss177155@8.141.8.50:27017/'  # MongoDB连接字符串
+    _URL = f"mongodb://{username}:{password}@{host}:{port}/"  # MongoDB连接字符串
     _client: MongoClient = None  # MongoClient实例，用于连接MongoDB
     _db = None  # 数据库实例
     _is_connected: bool = False  # 连接状态标记
@@ -59,7 +65,7 @@ class MongoDB:
         if self._is_connected:
             return self
         try:
-            self._db = self._client['chitchat']  # 选择数据库
+            self._db = self._client[os.getenv("MONGODB_DATABASE", 'chitchat')]  # 选择数据库
             self._is_connected = True
             self._logger.info('成功连接到MongoDB')
         except Exception as e:

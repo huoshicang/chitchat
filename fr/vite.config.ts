@@ -7,10 +7,14 @@ export default defineConfig({
   plugins: [vue(), tailwindcss()],
   server: {
     proxy: {
+      '/chitchat': {
+        target: 'http://127.0.0.1:9000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/chitchat/, '')
+      },
       '/api': {
         target: 'http://127.0.0.1:9000',
         changeOrigin: true,
-        //rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
   }

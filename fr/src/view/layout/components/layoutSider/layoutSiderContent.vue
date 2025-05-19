@@ -1,5 +1,5 @@
 <template>
-  <n-layout-content position="absolute" style="top: 64px; bottom: 95px" :native-scrollbar="false">
+  <n-layout-content position="absolute" style="bottom: 138px" :native-scrollbar="false">
     <layoutSiderContentCom />
   </n-layout-content>
 </template>

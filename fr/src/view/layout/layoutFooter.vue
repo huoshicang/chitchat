@@ -1,26 +1,37 @@
 <template>
   <n-layout-footer position="absolute" class="h-34.5">
     <div class="flex flex-col">
+      <!--功能-->
       <div class="flex justify-between">
+        <!--左-->
         <n-input-group class="input-group">
-          <n-button ghost>
+          <n-button>
             <template #icon>
               <n-icon>
-                <TrashOutline/>
+                <GlobeOutline/>
+              </n-icon>
+            </template>
+          </n-button>
+          <n-button :disabled="true">
+            <template #icon>
+              <n-icon>
+                <ScanSharp/>
               </n-icon>
             </template>
           </n-button>
         </n-input-group>
+        <!--右-->
         <div class="w-69 flex justify-between">
           <ModelSelect/>
-          <n-button v-show="!props.sendLoding" ghost @click="sendMessageFooter" :loading="props.sendLoding" :disabled="props.sendLoding">
+          <n-button v-show="!props.sendLoding" ghost @click="sendMessageFooter" :loading="props.sendLoding"
+                    :disabled="props.sendLoding">
             <template #icon>
               <n-icon>
                 <SendOutline/>
               </n-icon>
             </template>
           </n-button>
-          <n-button v-show="props.sendLoding" @click="emit('clear_message')" ghost>
+          <n-button v-show="props.sendLoding" @click="emit('clear_message')">
             <template #icon>
               <n-icon>
                 <StopCircleOutline/>
@@ -30,9 +41,9 @@
         </div>
       
       </div>
+      <!--输入框-->
       <n-input
         v-model:value="text"
-        
         type="textarea"
         placeholder=""
         :rows="4"
@@ -45,10 +56,13 @@
 <script setup lang="ts">
 import {NButton, NIcon, useMessage} from "naive-ui";
 import ModelSelect from "../../components/drawer/model/select.vue";
-import {SendOutline, TrashOutline, StopCircleOutline} from "@vicons/ionicons5";
+import {SendOutline, GlobeOutline, ScanSharp, StopCircleOutline} from "@vicons/ionicons5";
 import {ref} from "vue";
 
+
 const message = useMessage()
+
+
 
 const props = defineProps({
   sendLoding: {
@@ -69,8 +83,6 @@ const sendMessageFooter = () => {
     message.warning("请输入内容")
     return;
   }
-  
-  
   emit("send_message", text.value);
   text.value = "";
 };

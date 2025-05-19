@@ -16,7 +16,7 @@ export const settings = defineStore(
     const promptsConfig: { [key: string]: boolean } = ref()
 
     const getData = async () => {
-      const {status_code, data, message} = await instance.get('/auth')
+      const {status_code, data, message} = await instance.get('auth')
 
       user_info.value = {
         setting: data.setting,
@@ -24,11 +24,11 @@ export const settings = defineStore(
         _id: data._id,
       }
 
-
-
       siderContent.value = data.siderContent
       messageConfig.value = data.messageConfig
       promptsConfig.value = data.promptsConfig
+
+
     }
 
     return {

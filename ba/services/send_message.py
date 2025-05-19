@@ -77,9 +77,13 @@ async def send_message(websocket: WebSocket, message_data: NewMessage, headers) 
                                  prompt=prompt)
 
         try:
+
+            print(model_var)
+
             # 添加消息到消息列表
             model_var['messages'] = prompt
             # 发送消息并返回 AI 响应
+
             chunk_data = await initiate_ai(ai_var=ai_var, model_var=model_var, websocket=websocket)
             # 保存消息
             prompt.append(chunk_data)

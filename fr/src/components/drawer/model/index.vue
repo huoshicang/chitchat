@@ -26,7 +26,7 @@
         <n-input v-model:value="modelValue.name"/>
       </n-form-item>
       <n-form-item label="key" path="api_key">
-        <n-input v-model:value="modelValue.ai_var.api_key"/>
+        <n-input type="password" show-password-on="click" v-model:value="modelValue.ai_var.api_key"/>
       </n-form-item>
       <n-form-item label="端点" path="base_url">
         <n-input v-model:value="modelValue.ai_var.base_url"/>

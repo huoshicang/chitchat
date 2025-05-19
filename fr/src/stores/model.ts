@@ -58,6 +58,10 @@ export const model = defineStore(
       modelValue.extra = extra
     }
 
+    const add = () => {
+
+    }
+
     return {
       modelValue,
       setModel

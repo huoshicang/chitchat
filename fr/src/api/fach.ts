@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const instance = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_APP_API_URL ?? '/chitchat/api',
   timeout: 30000,
 });
 

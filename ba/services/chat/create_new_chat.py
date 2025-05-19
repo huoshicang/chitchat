@@ -1,3 +1,4 @@
+import json
 from audioop import error
 from typing import List
 
@@ -28,13 +29,18 @@ async def create_new_chat(
     if not message_id:
         logger.warning("无消息id，不创建")
 
+    data = {
+        "reasoning_content": "",
+        "content": ""
+    }
+
     try:
 
         try:
             # 获取标题
-            client = OpenAI(**ai_var).chat.completions.create(
+            completion = OpenAI(**ai_var).chat.completions.create(
                 model=model_var.get("model"),
-                stream=False,
+                stream=model_var.get("stream", True),
                 temperature=0.4,
                 top_p=1,
                 messages=[
@@ -55,7 +61,24 @@ The name is:
                 ]
             )
 
-            title = client.choices[0].message.content
+
+
+            if model_var.get('stream'):
+                for chunk in completion:
+                    chunk_data = json.loads(chunk.model_dump_json())
+
+                    choice = chunk_data.get('choices', [{}])[0]
+
+                    delta = choice.get("delta", {})
+                    reasoning_content = delta.get('reasoning_content')
+                    content = delta.get('content')
+
+                    if reasoning_content is not None:
+                        data['reasoning_content'] += reasoning_content
+                    elif content is not None:
+                        data['content'] += content
+            else:
+                data['content'] = completion.choices[0].message.content
 
 
         except error:
@@ -66,7 +89,7 @@ The name is:
                        {
                            "user_id": authorization,
                            "message_id": message_id,
-                           "title": title,
+                           "title": data.get('content'),
                            "share": False,
                            "archive": False
                        })()
@@ -82,7 +105,7 @@ The name is:
 
             "chat_id": str(chat.inserted_id),
             "message_id": message_id,
-            "title": title
+            "title":  data.get('content')
         }
 
     except PyMongoError as e:

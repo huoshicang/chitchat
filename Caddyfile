@@ -7,8 +7,8 @@
     
     header @cache Cache-Control "public, max-age=604800, must-revalidate"
 
-    handle_path /chaichat/* {
-        reverse_proxy localhost:8000
+    handle_path /chitchat/* {
+        reverse_proxy localhost:9000
     }
 
     handle /* {

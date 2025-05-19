@@ -15,7 +15,6 @@ def judgment_auth(request) -> JSONResponse:
     auth = False
     auth_header = request.headers.get("authorization")
     user = {}
-
     if auth_header and auth_header.startswith("Bearer "):
         try:
             user_id = auth_header.replace("Bearer ", '')
@@ -25,7 +24,6 @@ def judgment_auth(request) -> JSONResponse:
             # 查询用户信息
             user, error_message = db.find_one('users', {'user_id': user_id},
                                               {})()
-
 
             # 用户不存在，创建新用户
             if user:
@@ -67,6 +65,9 @@ def judgment_auth(request) -> JSONResponse:
 
             auth = True
             logger.info(f"用户 {user_id} 认证成功")  # 认证成功日志
+
+            user, error_message = db.find_one('users', {'user_id': user_id},
+                                              {})()
 
         except Exception as e:
             logger.error(f"数据库操作失败: {e}", exc_info=True)

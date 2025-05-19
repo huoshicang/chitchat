@@ -10,7 +10,7 @@
             <n-form-item label="setting_id">
               <n-input-group>
                 <n-input :style="{ width: '60%' }" v-model:value="user_info.setting"/>
-                <n-button type="primary" ghost @click="copyToClipboard(user_info.setting)">
+                <n-button type="primary" ghost @click="copyToClip(user_info.setting)">
                   复制
                 </n-button>
               </n-input-group>
@@ -101,6 +101,7 @@
 import {settings} from "../../../stores/setting.ts"
 import {useMessage} from "naive-ui"
 import instance from "../../../api/fach.ts";
+import {copyToClip} from "../../../utils/copy.ts";
 
 const siderContent = settings().siderContent
 const messageConfig = settings().messageConfig
@@ -109,13 +110,13 @@ const user_info = settings().user_info
 const msg = useMessage()
 
 // 复制
-const copyToClipboard = (text) => {
-  navigator.clipboard.writeText(text).then(() => {
-    msg.success('文本已复制到剪贴板');
-  }).catch(err => {
-    msg.error('无法复制文本: ', err);
-  });
-}
+//const copyToClipboard = (text) => {
+//  navigator.clipboard.writeText(text).then(() => {
+//    msg.success('文本已复制到剪贴板');
+//  }).catch(err => {
+//    msg.error('无法复制文本: ', err);
+//  });
+//}
 
 const submit = async () => {
   const {status_code, _, message} = await instance.post('/setting/edit', {

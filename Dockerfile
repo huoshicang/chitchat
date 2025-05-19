@@ -1,40 +1,38 @@
-FROM node:21.0.0-alpine as frontend-builder
+FROM node:23.11.1-alpine as fr
 
 RUN npm config set registry https://registry.npm.taobao.org/
 
 WORKDIR /app
 
-COPY frontend-vue/package.json /app/
-COPY frontend-vue/package-lock.json /app/
+COPY fr/package.json /app/
+COPY fr/package-lock.json /app/
 
 RUN npm i
 
-COPY frontend-vue/. /app/
+COPY fr/. /app/
 
 RUN npm run build
 
-EXPOSE 8080
+EXPOSE 5173
 
 
-FROM python:3.12.3-alpine
+FROM python:3.12.10-alpine
 
 RUN apk add --update caddy gcc musl-dev libffi-dev
 
 WORKDIR /app
 
-COPY backend/requirements.txt /app/
+COPY ba/requirements.txt /app/
 
 RUN pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
 
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
-RUN pip install redis
-
-COPY backend/. /app/
+COPY ba/. /app/
 
 COPY Caddyfile /app/Caddyfile
 
-COPY --from=frontend-builder /app/dist /app/backend/dist
+COPY --from=fr /app/dist /app/backend/dist
 
 EXPOSE 80
 

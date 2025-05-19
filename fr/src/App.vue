@@ -31,6 +31,12 @@ onMounted(async () => {
   
   await Settings.getData()
   
+ 
   
 });
+
+console.log(import.meta.env.VITE_APP_API_URL)
+console.log(import.meta.env.VITE_APP_BALEURL)
+console.log(import.meta.env.VITE_APP_WS_BALEURL)
+
 </script>

@@ -5,7 +5,8 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "vue-tsc -b && vite build",
+		"builds": "vue-tsc -b && vite build",
+		"build": "vite build",
 		"preview": "vite preview"
 	},
 	"dependencies": {
@@ -41,7 +42,7 @@
 		"naive-ui": "^2.41.0",
 		"typescript": "~5.7.2",
 		"vfonts": "^0.0.3",
-		"vite": "^6.2.3",
+		"vite": "6.3.4",
 		"vue-tsc": "^2.2.0"
 	}
 }

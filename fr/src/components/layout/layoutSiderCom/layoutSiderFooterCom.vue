@@ -1,5 +1,8 @@
 <template>
   <n-flex vertical>
+    <n-button ghost @click="New">
+      新建
+    </n-button>
     <n-button @click="active = true">设置</n-button>
     <n-button>关于</n-button>
   </n-flex>
@@ -36,11 +39,21 @@ import Show from "../../../components/drawer/show/index.vue"
 import Prompts from "../../../components/drawer/prompts/index.vue"
 import {info} from "../../../stores/info.ts";
 import {useRoute} from "vue-router";
+import {NButton} from "naive-ui";
+import { useRouter } from 'vue-router';
+
 
 const config = info();
 const route = useRoute();
-
+const router = useRouter();
 const active = ref<boolean>(false)
+
+const New = () => {
+  router.push(`/`)
+  config.set_title(null)
+  config.set_new_chat(null)
+  config.set_prompt(null)
+}
 
 // 监听路由变化
 watch(

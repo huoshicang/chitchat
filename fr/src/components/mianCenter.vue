@@ -29,7 +29,6 @@ const messageListIndex = computed(() => {
   return messages.value.length - 1
 })
 
-const protocol = window.location.protocol === "https:" ? "wss" : "ws";
 let socket = null
 
 /*
@@ -40,7 +39,14 @@ let socket = null
 const send_message = (sendMessage: string) => {
   sendLoding.value = true;
   
-  socket = new WebSocket(`${protocol}://127.0.0.1:9000/ws`,);
+  const host =
+  import.meta.env.VITE_APP_WS_BALEURL !== "/chitchat/ws"
+      ? import.meta.env.VITE_APP_BALEURL.replace(`${window.location.protocol}//`, "")
+      : window.location.host;
+
+  const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+
+  socket = new WebSocket(`${protocol}://${host}${import.meta.env.VITE_APP_WS_BALEURL}`,);
   
   let prompt = []
   

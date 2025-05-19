@@ -9,9 +9,27 @@
         :class="item.role === 'user' ? 'flex-row-reverse ml-12.5 mr-0' : 'ml-0 mr-12.5'"
       >
         
-        <img class="w-7 h-7 rounded-full" :class="item.role === 'user' ? 'ml-2' : 'mr-2'"
-             src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" alt="">
-        <div class="flex flex-col" :class="item.role === 'user' ? 'items-end' : 'items-start'">
+        
+        <n-avatar
+          class="w-7 h-7 rounded-full" :class="item.role === 'user' ? 'ml-2' : 'mr-2'"
+          round
+          size="medium"
+          :style="{ backgroundColor: 'rgb(255 255 255 / 0%)', }"
+          :src="item.role === 'user' ? 'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg' : ''"
+        >
+          <n-icon v-if="item.id">
+            <svg t="1747639213398" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="1484"
+                 xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
+              <path
+                d="M256 469.333333a85.333333 85.333333 0 0 1 85.333333-85.333333h341.333334a85.333333 85.333333 0 0 1 85.333333 85.333333v298.666667a85.333333 85.333333 0 0 1-85.333333 85.333333H341.333333a85.333333 85.333333 0 0 1-85.333333-85.333333z m256-384a85.333333 85.333333 0 0 0-85.333333 85.333334 85.333333 85.333333 0 0 0 42.666666 73.386666V298.666667H341.333333a170.666667 170.666667 0 0 0-170.666666 170.666666v85.333334a85.333333 85.333333 0 0 0 0 170.666666v42.666667a170.666667 170.666667 0 0 0 170.666666 170.666667h341.333334a170.666667 170.666667 0 0 0 170.666666-170.666667v-42.666667a85.333333 85.333333 0 0 0 0-170.666666v-85.333334a170.666667 170.666667 0 0 0-170.666666-170.666666h-128V244.053333a85.333333 85.333333 0 0 0-24.32-156.586666A67.413333 67.413333 0 0 0 512 85.333333z m-42.666667 448a64 64 0 0 0-128 0 21.333333 21.333333 0 0 0 21.333334 21.333334h85.333333a21.333333 21.333333 0 0 0 21.333333-21.333334z m149.333334-64a64 64 0 0 0-64 64 21.333333 21.333333 0 0 0 21.333333 21.333334h85.333333a21.333333 21.333333 0 0 0 21.333334-21.333334 64 64 0 0 0-64-64z m-21.333334 170.666667h-170.666666a42.666667 42.666667 0 0 0-42.666667 42.666667 85.333333 85.333333 0 0 0 85.333333 85.333333h85.333334a85.333333 85.333333 0 0 0 85.333333-85.333333 42.666667 42.666667 0 0 0-42.666667-42.666667z"
+                p-id="1485" fill="#8a8a8a"></path>
+            </svg>
+          </n-icon>
+        </n-avatar>
+        
+        <div class=" flex flex-col
+        " :class="item.role === 'user' ? 'items-end' : 'items-start'">
           <n-collapse arrow-placement="right" class="ml-3" v-show="reasoning_content_show(item)">
             <n-collapse-item title="思考">
               <Text :text="reasoning_content(item)"/>
@@ -23,8 +41,8 @@
           </n-ellipsis>
           
           <n-space v-else>
-            <Text  :error="item.status_code" :asRawText="item.status_code" :text="content(item)"/>
-            <Loding v-show="index === props.messages.length - 1 && sendLoding && item.id" />
+            <Text :error="item.status_code" :asRawText="item.status_code" :text="content(item)"/>
+            <Loding v-show="index === props.messages.length - 1 && sendLoding && item.id"/>
           </n-space>
           
           
@@ -47,14 +65,14 @@
               </template>
             </n-button>
             <!--复制-->
-            <n-button ghost size="small">
+            <n-button ghost size="small" @click="copyToClip(content(item))">
               <template #icon>
                 <n-icon>
                   <ClipboardOutline/>
                 </n-icon>
               </template>
             </n-button>
-          <!--删除-->
+            <!--删除-->
             <n-button ghost size="small">
               <template #icon>
                 <n-icon>
@@ -62,9 +80,18 @@
                 </n-icon>
               </template>
             </n-button>
+            <!--重试-->
+            <n-button ghost size="small" v-show="item.role === 'user'">
+              <template #icon>
+                <n-icon>
+                  <RefreshOutline/>
+                </n-icon>
+              </template>
+            </n-button>
           </n-input-group>
-        </div>
         
+        </div>
+      
       </div>
     </n-infinite-scroll>
   </n-layout-content>
@@ -74,12 +101,14 @@
 import Text from "../../components/text/index.vue"
 import Loding from "./components/layoutSider/loding.vue"
 import {NButton, NIcon} from "naive-ui";
-import {ClipboardOutline, Pencil, TrashOutline} from "@vicons/ionicons5";
+import {ClipboardOutline, Pencil, TrashOutline, RefreshOutline, ColorFill} from "@vicons/ionicons5";
 import 'katex/dist/katex.min.css'
 import '../../styles/lib/tailwind.css'
 import '../../styles/lib/highlight.less'
 import '../../styles/lib/github-markdown.less'
 import {settings} from "../../stores/setting.ts";
+import {copyToClip} from "../../utils/copy.ts";
+
 
 const config = settings().messageConfig;
 
