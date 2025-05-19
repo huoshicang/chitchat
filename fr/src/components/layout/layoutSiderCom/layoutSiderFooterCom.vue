@@ -9,7 +9,7 @@
   
   <n-drawer
     v-model:show="active"
-    :default-width="900"
+    :default-width="isMobile ? 400 : 900"
     placement="right"
     resizable
   >
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watch} from "vue";
+import {onMounted, onUnmounted, ref, watch} from "vue";
 import Model from "../../../components/drawer/model/index.vue"
 import Show from "../../../components/drawer/show/index.vue"
 import Prompts from "../../../components/drawer/prompts/index.vue"
@@ -47,6 +47,7 @@ const config = info();
 const route = useRoute();
 const router = useRouter();
 const active = ref<boolean>(false)
+const isMobile = ref(false);
 
 const New = () => {
   router.push(`/`)
@@ -54,6 +55,32 @@ const New = () => {
   config.set_new_chat(null)
   config.set_prompt(null)
 }
+
+
+
+// 判断是否为移动设备的方法
+function checkIsMobile() {
+  const userAgent = navigator.userAgent || '';
+  // 常见的移动端标识符
+  const mobileKeywords = ['Android', 'webOS', 'iPhone', 'iPad', 'iPod', 'BlackBerry', 'Windows Phone'];
+  
+  // 检查 userAgent 是否包含任何一个关键字
+  const isUserAgentMobile = mobileKeywords.some(keyword => userAgent.indexOf(keyword) > -1);
+  
+  // 结合视口宽度进行判断
+  isMobile.value = isUserAgentMobile || window.innerWidth <= 768;
+}
+
+onMounted(() => {
+  checkIsMobile();
+  // 监听窗口大小变化
+  window.addEventListener('resize', checkIsMobile);
+});
+
+onUnmounted(() => {
+  // 组件卸载时移除事件监听器
+  window.removeEventListener('resize', checkIsMobile);
+});
 
 // 监听路由变化
 watch(
