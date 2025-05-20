@@ -1,5 +1,5 @@
 <template>
-  <n-select style="width: 240px"
+  <n-select style="width: 200px"
             v-model:value="ModelValue.modelValue.id"
             size="medium"
             :options="options"

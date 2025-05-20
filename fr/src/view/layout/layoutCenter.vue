@@ -1,5 +1,9 @@
 <template>
-  <n-layout-content position="absolute" style="top: 64px; bottom: 140px" content-style="padding: 24px;"
+  <n-layout-content position="absolute" :style="{
+  top: '64px',
+  bottom: '140px',
+  height: isHeight / 16 - 12.375 + 'rem',
+  }" content-style="padding: 24px;"
                     :native-scrollbar="false">
     <n-infinite-scroll :distance="10">
       <div
@@ -8,7 +12,6 @@
         class="message flex mb-2.5"
         :class="item.role === 'user' ? 'flex-row-reverse ml-12.5 mr-0' : 'ml-0 mr-12.5'"
       >
-        
         
         <n-avatar
           class="w-7 h-7 rounded-full" :class="item.role === 'user' ? 'ml-2' : 'mr-2'"
@@ -42,7 +45,7 @@
           
           <n-space v-else>
             <Text :error="item.status_code" :asRawText="item.status_code" :text="content(item)"/>
-            <Loding v-show="index === props.messages.length - 1 && sendLoding && item.id"/>
+            <n-spin size="small" v-show="index === props.messages.length - 1 && sendLoding && item.id" />
           </n-space>
           
           
@@ -108,8 +111,9 @@ import '../../styles/lib/highlight.less'
 import '../../styles/lib/github-markdown.less'
 import {settings} from "../../stores/setting.ts";
 import {copyToClip} from "../../utils/copy.ts";
+import {inject} from "vue";
 
-
+const isHeight = inject('innerHeight')
 const config = settings().messageConfig;
 
 /** 给组件指定初始值 */

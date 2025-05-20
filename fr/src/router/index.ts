@@ -1,7 +1,5 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
-
-import App from '../App.vue'; // 假设这是你的首页组件
 import MianCenter from '../components/mianCenter.vue'; // 假设这是你的聊天室页面组件
 
 const routes = [
