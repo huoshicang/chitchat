@@ -11,15 +11,15 @@
 <script setup lang="ts">
 import {change} from "./index.data.ts";
 import {watch, ref, onMounted} from "vue";
-import instance from "../../../api/fach.ts";
 import {model} from "../../../stores/model.ts";
+import {Api} from "../../../api/api.ts";
 
 const ModelValue = model()
 
 const options = ref([])
 
 const getData = async () => {
-  const {status_code, data, message} = await instance.get("model/model")
+  const {status_code, data, message} = await Api.get_model()
   
   if (status_code === 200) options.value = data
   else {

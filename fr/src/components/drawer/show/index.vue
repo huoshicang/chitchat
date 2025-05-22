@@ -28,16 +28,16 @@
         <template #description>
           <n-space size="large">
             <div>总开关：
-              <n-switch v-model:value="siderContent.display"/>
+              <n-switch v-model:value="sider_config.display"/>
             </div>
             <div>id：
-              <n-switch v-model:value="siderContent.id"/>
+              <n-switch v-model:value="sider_config.id"/>
             </div>
             <div>分享：
-              <n-switch v-model:value="siderContent.share"/>
+              <n-switch v-model:value="sider_config.share"/>
             </div>
             <div>归档：
-              <n-switch v-model:value="siderContent.archive"/>
+              <n-switch v-model:value="sider_config.archive"/>
             </div>
           </n-space>
         </template>
@@ -48,28 +48,28 @@
         <template #description>
           <n-space size="large">
             <div>总开关：
-              <n-switch v-model:value="messageConfig.showAll"/>
+              <n-switch v-model:value="message_config.show_all"/>
             </div>
             <div>模型：
-              <n-switch v-model:value="messageConfig.showModel"/>
+              <n-switch v-model:value="message_config.show_model"/>
             </div>
             <div>提示令牌：
-              <n-switch v-model:value="messageConfig.showPromptTokens"/>
+              <n-switch v-model:value="message_config.show_prompt_mark"/>
             </div>
             <div>完成令牌：
-              <n-switch v-model:value="messageConfig.showCompletionTokens"/>
+              <n-switch v-model:value="message_config.show_completion_token"/>
             </div>
             <div>总令牌：
-              <n-switch v-model:value="messageConfig.showTotalTokens"/>
+              <n-switch v-model:value="message_config.show_token_total"/>
             </div>
             <div>推理令牌：
-              <n-switch v-model:value="messageConfig.showReasoningTokens"/>
+              <n-switch v-model:value="message_config.show_inference_token"/>
             </div>
             <div>时间：
-              <n-switch v-model:value="messageConfig.showTime"/>
+              <n-switch v-model:value="message_config.show_time"/>
             </div>
             <div>思考：
-              <n-switch v-model:value="messageConfig.think"/>
+              <n-switch v-model:value="message_config.think"/>
             </div>
           </n-space>
         </template>
@@ -80,7 +80,7 @@
         <template #description>
           <n-space size="large">
             <div>分享：
-              <n-switch v-model:value="promptsConfig.share"/>
+              <n-switch v-model:value="prompts_config.share"/>
             </div>
           </n-space>
         </template>
@@ -103,9 +103,10 @@ import {useMessage} from "naive-ui"
 import instance from "../../../api/fach.ts";
 import {copyToClip} from "../../../utils/copy.ts";
 
-const siderContent = settings().siderContent
-const messageConfig = settings().messageConfig
-const promptsConfig = settings().promptsConfig
+const sider_config = settings().sider_config
+const message_config = settings().message_config
+const prompts_config = settings().prompts_config
+const setting_cnfig = settings().setting_cnfig
 const user_info = settings().user_info
 const msg = useMessage()
 
@@ -122,9 +123,9 @@ const submit = async () => {
   const {status_code, _, message} = await instance.post('/setting/edit', {
     setting: user_info.setting,
     id: user_info._id,
-    siderContent,
-    messageConfig,
-    promptsConfig
+    sider_config,
+    message_config,
+    prompts_config
   })
   
   if (status_code === 200) msg.success('修改成功')

@@ -31,7 +31,7 @@ def judgment_auth(request) -> JSONResponse:
             else:
 
                 # 菜单
-                siderContent = {
+                sider_config = {
                     "display": True,
                     "id": True,
                     "share": True,
@@ -39,28 +39,37 @@ def judgment_auth(request) -> JSONResponse:
                 }
 
                 # 消息
-                messageConfig = {
-                    "showAll": True,
-                    "showModel": True,
-                    "showPromptTokens": True,
-                    "showCompletionTokens": True,
-                    "showTotalTokens": True,
-                    "showReasoningTokens": True,
-                    "showTime": True,
+                message_config = {
+                    "show_all": True,
+                    "show_model": True,
+                    "show_prompt_mark": True,
+                    "show_completion_token": True,
+                    "show_token_total": True,
+                    "show_inference_token": True,
+                    "show_time": True,
                     "think": True,
                 }
 
-                promptsConfig = {
+                prompts_config = {
                     "share": True
+                }
+
+                setting_cnfig = {
+                    "use_user_model": user_id,
+                    "use_user_prompt": user_id,
+                    "use_user_chat": user_id
                 }
 
                 user = db.insert_one('users', {
                     'user_id': user_id,
                     "setting": user_id,
-                    "siderContent": siderContent,
-                    "messageConfig": messageConfig,
-                    "promptsConfig": promptsConfig,
+                    "sider_config": sider_config,
+                    "message_config": message_config,
+                    "prompts_config": prompts_config,
+                    "setting_cnfig": setting_cnfig,
                 })()
+
+
                 logger.info(f"创建新用户：{user_id}，状态为：{user}")
 
             auth = True

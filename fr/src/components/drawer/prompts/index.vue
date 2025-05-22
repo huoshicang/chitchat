@@ -101,43 +101,11 @@
       {{ item.title }}
     </n-popover>
   </n-flex>
-  
-  <!--<n-list hoverable clickable>-->
-  <!--  <n-list-item v-for="(item, index) in data_list" :key="item._id">-->
-  <!--    <template #suffix>-->
-  <!--      <n-space>-->
-  <!--        <n-button-group>-->
-  <!--          <n-button @click="">-->
-  <!--            删除-->
-  <!--          </n-button>-->
-  <!--          <n-button @click="new_prompt = item">-->
-  <!--            修改-->
-  <!--          </n-button>-->
-  <!--        </n-button-group>-->
-  <!--        <n-button-group>-->
-  <!--          <n-button>-->
-  <!--            使用-->
-  <!--          </n-button>-->
-  <!--          <n-button @click="share(item._id)" v-show="item._id == user_id">-->
-  <!--            分享-->
-  <!--          </n-button>-->
-  <!--        </n-button-group>-->
-  <!--      </n-space>-->
-  <!--    -->
-  <!--    </template>-->
-  <!--    <n-thing>-->
-  <!--      <template #header>-->
-  <!--      </template>-->
-  <!--      {{ item.prompt }}-->
-  <!--    </n-thing>-->
-  <!--  </n-list-item>-->
-  <!--</n-list>-->
 </template>
 
 <script setup lang="ts">
 import {h, onMounted, ref, watch} from "vue";
 import {EllipsisVerticalOutline} from '@vicons/ionicons5'
-import instance from "../../../api/fach.ts";
 import {NText, useMessage} from "naive-ui";
 import type {DropdownOption} from 'naive-ui'
 import New from "./new.vue"
@@ -145,9 +113,10 @@ import {share, del, close, showInner, new_prompt, data_list, searchValue} from "
 import {settings} from "../../../stores/setting.ts";
 import {info} from "../../../stores/info.ts";
 import {useRouter} from "vue-router";
+import {Api} from "../../../api/api.ts";
 
 const router = useRouter();
-const config = settings().promptsConfig;
+const config = settings().prompts_config;
 const set_prompt = info().set_prompt
 const msg = useMessage()
 // 原始数据
@@ -189,10 +158,9 @@ const handleSelect = (key: string | number, option: DropdownOption) => {
 
 // 获取数据
 const getData = async () => {
-  const {status_code, data, message} = await instance.get(`prompts/porompts`);
+  const {status_code, data, message} = await Api.get_prompts()
   if (status_code === 200) {
     original = data
-    console.log(original)
     data_list.value = data
   } else msg.warning(message);
 }

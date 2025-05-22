@@ -11,7 +11,7 @@ import {ChatbubblesOutline} from "@vicons/ionicons5";
 
 // 菜单操作
 const options = (item) => {
-  const config = settings().siderContent;
+  const config = settings().sider_config;
 
 
   const baseOptions: OPTIONSItem[] = [
@@ -81,7 +81,8 @@ const handleSelect = async (key: string | number, option: DropdownOption): void 
     case 'share':
       const url = urlMap[key as keyof typeof urlMap];
 
-      const {status_code, _, message} = await instance.get(url)
+      const {status_code, _, message} = await ins
+      tance.get(url)
       if (status_code === 200) window.$message.success(message)
       else window.$message.warning(message)
 

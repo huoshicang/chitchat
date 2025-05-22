@@ -1,6 +1,7 @@
-import type { SelectBaseOption } from 'naive-ui';
-import { model } from '../../../stores/model.ts';
-import instance from '../../../api/fach.ts';
+import type {SelectBaseOption} from 'naive-ui';
+import {model} from '../../../stores/model.ts';
+import {Api} from "../../../api/api.ts";
+
 
 /**
  * 设置模型的默认值
@@ -67,9 +68,7 @@ export const copy = () => {
 export const del = async () => {
   const Model = model();
 
-  const { status_code, _, message } = await instance.get(
-    `model/del?model_id=${Model.modelValue.id}`,
-  );
+  const {status_code, _, message} = await Api.del_model(Model.modelValue.id)
 
   if (status_code === 200) {
     window.$message.success(message);
@@ -84,7 +83,8 @@ export const del = async () => {
  * @param value 新模型的数据
  */
 export const add = async (value) => {
-  const { status_code, _, message } = await instance.post('model/new', value);
+  console.log('新模型', value)
+  const {status_code, _, message} = await Api.new_model(value)
 
   if (status_code === 200) {
     window.$message.success(message);
@@ -99,7 +99,8 @@ export const add = async (value) => {
  * @param value 编辑后的模型数据
  */
 export const edit = async (value) => {
-  const { status_code, _, message } = await instance.post('model/edit', value);
+  console.log('编辑模型', value)
+  const {status_code, _, message} = await Api.edit_model(value)
 
   if (status_code === 200) {
     window.$message.success(message);

@@ -8,7 +8,7 @@ import {onMounted, ref, toRaw, watch} from "vue";
 import {useRoute, useRouter} from 'vue-router';
 import {setMenuOptions} from "./layoutSiderContent.data.ts";
 import {info} from "../../../stores/info.ts";
-import instance from "../../../api/fach.ts";
+import {Api} from "../../../api/api.ts";
 
 const config = info();
 const msg = useMessage()
@@ -25,7 +25,7 @@ const handleUpdateValue = (key: string, item: MenuOption) => {
 }
 
 const getData = async () => {
-  const {status_code, data, message} = await instance.get('chats/chat')
+  const {status_code, data, message} = await Api.get_chat()
   if (status_code === 200) menuOptions.value = setMenuOptions(data)
   else msg.warning(message)
 }

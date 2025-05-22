@@ -1,7 +1,7 @@
-
 import instance from "../../../api/fach.ts";
 import {ref} from "vue";
 import type {originalType} from "./index";
+import {Api} from "../../../api/api.ts";
 
 // 新增框是否显示
 export const showInner = ref<boolean>(false)
@@ -28,9 +28,9 @@ export const close = () => {
 
 // 分享
 export const share = async (id: string) => {
-  const {status_code, _, message} = await instance.get(
-    `prompts/share?prompts_id=${id}`,
-  );
+  const {status_code, _, message} = await Api.share_prompts({
+    prompts_id: id
+  })
 
   if (status_code === 200) window.$message.success(message);
   else window.$message.warning(message);
@@ -38,9 +38,9 @@ export const share = async (id: string) => {
 
 // 删除
 export const del = async (id: string) => {
-  const {status_code, _, message} = await instance.get(
-    `prompts/del?prompts_id=${id}`,
-  );
+  const {status_code, _, message} = await Api.del_prompts({
+    prompts_id: id
+  })
 
   if (status_code === 200) window.$message.success(message);
   else window.$message.warning(message);
@@ -50,8 +50,8 @@ export const del = async (id: string) => {
  * 添加新模型
  * @param value 新模型的数据
  */
-export const add = async (value) => {
-  const {status_code, _, message} = await instance.post('prompts/new', value);
+export const add = async (value: originalType) => {
+  const {status_code, _, message} = await Api.new_prompts(value)
 
   if (status_code === 200) window.$message.success(message);
   else window.$message.warning(message);
@@ -61,8 +61,8 @@ export const add = async (value) => {
  * 编辑模型
  * @param value 编辑后的模型数据
  */
-export const edit = async (value) => {
-  const {status_code, _, message} = await instance.post('prompts/edit', value);
+export const edit = async (value: originalType) => {
+  const {status_code, _, message} = await Api.edit_prompts(value)
 
   if (status_code === 200) window.$message.success(message);
   else window.$message.warning(message);

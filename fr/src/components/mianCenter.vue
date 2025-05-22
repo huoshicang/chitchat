@@ -15,6 +15,7 @@ import {useRoute, useRouter} from 'vue-router';
 import instance from "../api/fach.ts";
 import {model} from "../stores/model.ts";
 import {info} from "../stores/info.ts";
+import {Api} from "../api/api.ts";
 
 const msg = useMessage()
 const route = useRoute();
@@ -181,7 +182,7 @@ const clear_message = () => {
 
 // 获取数据
 const getData = async () => {
-  const {status_code, data, message} = await instance.get(`messages/${chatId.value}`)
+  const {status_code, data, message} = await Api.get_message(chatId.value)
   
   if (status_code === 200) {
     messages.value = data['message']

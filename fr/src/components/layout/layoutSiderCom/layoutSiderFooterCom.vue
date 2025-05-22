@@ -10,7 +10,7 @@
   
   <n-drawer
     v-model:show="active"
-    :default-width="isWidth - 10"
+    :default-width="isWidth <= 768 ? isWidth - 10 : isWidth * 0.5"
     placement="right"
     resizable
   >
@@ -58,10 +58,6 @@ const New = () => {
   config.set_new_chat(null)
   config.set_prompt(null)
 }
-
-onMounted(() => {
-  console.log(isWidth)
-})
 
 // 监听路由变化
 watch(
